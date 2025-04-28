@@ -22,7 +22,7 @@ This project is based off of [fly-apps/nats-cluster][nats-cluster].
 
 ## Setup
 
-Clone this repository follow the stems:
+Clone this repository follow these steps:
 
 1. Copy `fly.toml.example` to `fly.toml`.
 
