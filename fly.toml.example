@@ -1,0 +1,72 @@
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+app = 'restate'
+primary_region = 'sjc'
+kill_signal = 'SIGINT'
+kill_timeout = 60
+
+[build]
+# image = 'docker.restate.dev/restatedev/restate:1.3'
+dockerfile = 'Dockerfile'
+ignorefile = '.dockerignore'
+
+[deploy]
+strategy = 'rolling'
+max_unavailable = 1
+
+[env]
+# any environment variables you set here will override the dockerfile, which
+# may cause problems.
+
+# for a volume mount, a "lost+found" folder is created which can sometimes
+# cause restate to fail to start. So we use a subdir of the volume
+RESTATE_BASE_DIR = '/restate-data/nodes'
+
+# on initial cluster creation, one must provision manually by going on to one
+# of the machines:
+#
+#  > fly ssh console
+#  > restatectl provision
+#
+RESTATE_AUTO_PROVISION = 'false'
+# indicate that we want data replicated
+RESTATE_BIFROST__DEFAULT_PROVIDER = 'replicated'
+RESTATE_METADATA_SERVER__TYPE = 'replicated'
+RESTATE_DEFAULT_REPLICATION = '2' # data replication factor, 2*replication factor - 1 number of nodes servive to still be available.
+
+# you'll need to configure S3 for snapshot storage, or you can choose to skip this if you don't plan on adding more nodes in the future.
+# RESTATE_WORKER__SNAPSHOTS__AWS_REGION = 'us-east-1'
+# RESTATE_WORKER__SNAPSHOTS__DESTINATION = 's3://restate-bucket/prefix/'
+# RESTATE_WORKER__SNAPSHOTS__SNAPSHOT_INTERVAL_NUM_RECORDS = '10000'
+#
+# secrets to set. Use `fly secrets set --stage VAR=value` to set them
+# RESTATE_WORKER__SNAPSHOTS__AWS_ACCESS_KEY_ID
+# RESTATE_WORKER__SNAPSHOTS__AWS_SECRET_ACCESS_KEY
+
+
+# other config values set by the docker image, some can be overridden safely,
+# overriding others may cause problems.
+#
+# RESTATE_CLUSTER_NAME = 'restate' # this will default to the fly app name
+# RESTATE_NODE_NAME = 'restate' # this will default to the fly machine id
+#
+# unlike go, rust seems to listen only on ipv4 or ipv6, fly runs on ipv6, so we need to be explicit.
+# RESTATE_BIND_ADDRESS = '[::]:5122' # this is set in the fly.toml
+# RESTATE_INGRESS__BIND_ADDRESS = '[::]:8080' 
+# RESTATE_ADMIN__BIND_ADDRESS = '[::]:9070'
+# RESTATE_ADMIN__QUERY_ENGINE__PGSQL_BIND_ADDRESS = '[::]:9071'
+# RESTATE_METADATA_CLIENT__ADDRESSES = '[...]' # this is set to all machines in app
+
+[[mounts]]
+source = 'restate__restate_data'
+destination = '/restate-data'
+initial_size = '1gb'
+auto_extend_size_threshold = 80
+auto_extend_size_increment = '10GB'
+auto_extend_size_limit = '100GB'
+
+[http_service]
+internal_port = 9070
+
+[[vm]]
+size = 'shared-cpu-1x'
+memory = '512mb'

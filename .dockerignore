@@ -12,3 +12,4 @@ docker-compose.yml
 *.log
 *.md
 fly.toml
+fly.toml.example

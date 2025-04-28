@@ -4,3 +4,4 @@
 .env.*.local
 *.swp
 *.log
+fly.toml
