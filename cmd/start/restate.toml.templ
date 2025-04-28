@@ -1,0 +1,20 @@
+node-name = "{{.ServerName}}"
+cluster-name = "{{.AppName}}"
+bind-address = "[::]:5122"
+advertised-address = "http://{{.ServerName}}.vm.{{.AppName}}.internal:5122"
+
+[metadata-client]
+addresses = [
+	{{range .MachineHosts}}"http://{{.}}:5122",
+	{{end}}
+]
+
+# unlike go, rust seems to listen only on ipv4 or ipv6, fly runs on ipv6, so we need to be explicit.
+[ingress]
+bind-address = "[::]:8080"
+
+[admin]
+bind-address = "[::]:9070"
+
+[admin.query-engine]
+bind-address = "[::]:9071"
