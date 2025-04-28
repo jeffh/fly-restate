@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.local
+.env.*.local
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+.vscode
+.idea
+*.swp
+*.log
+*.md
+fly.toml
