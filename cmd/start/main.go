@@ -71,7 +71,7 @@ var tmplRaw string
 
 func watchRestateConfig(vars FlyEnv) {
 	fmt.Println("Starting ticker")
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(60 * time.Second)
 	var lastReload time.Time
 
 	go func() {
@@ -94,7 +94,7 @@ func watchRestateConfig(vars FlyEnv) {
 					continue
 				}
 
-				cooloff := lastReload.Add(15 * time.Second)
+				cooloff := lastReload.Add(60 * 3 * time.Second)
 				if time.Now().Before(cooloff) {
 					fmt.Println("Regions changed, but cooloff period not expired")
 					continue
@@ -120,7 +120,7 @@ func watchRestateConfig(vars FlyEnv) {
 func restateConfigVars() (FlyEnv, error) {
 	host := "fly-local-6pn"
 	appName := os.Getenv("FLY_APP_NAME")
-	machineId := os.Getenv("FLY_MACHINE_ID")
+	machineId := os.Getenv("FLY_ALLOC_ID")
 
 	var ipv4 net.IP
 	var ipv6 net.IP
