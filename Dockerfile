@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 	--mount=type=cache,target=/go/pkg/mod \
 	CGO_ENABLED=0 GOOS=linux go build -v -o /app/bin/start ./cmd/start
 
-FROM restatedev/restate:1.3
+FROM restatedev/restate:1.5
 
 # Ingress
 EXPOSE 8080
