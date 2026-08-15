@@ -9,6 +9,11 @@ updates:
     labels:
       - "dependencies"
       - "go"
+    cooldown:
+      default-days: 7
+      semver-major-days: 7
+      semver-minor-days: 7
+      semver-patch-days: 7
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
@@ -19,6 +24,11 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    cooldown:
+      default-days: 7
+      semver-major-days: 7
+      semver-minor-days: 7
+      semver-patch-days: 7
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
@@ -29,3 +39,8 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+    cooldown:
+      default-days: 7
+      semver-major-days: 7
+      semver-minor-days: 7
+      semver-patch-days: 7
